@@ -1,9 +1,0 @@
-The files sha1.hpp and sha1.cpp are included from https://github.com/vog/sha1 a "SHA-1
-implementation in C++". It is licensed as 100% Public Domain and the authors are
-
-- Steve Reid (Original C Code)
-- [[http://untroubled.org/][Bruce Guenter]] (Small changes to fit into bglibs)
-- [[https://njh.eu/][Volker Grabsch]] (Translation to simpler C++ Code)
-- [[https://riot.so/][Eugene Hopkinson]] (Safety improvements)
-
-sha1.hpp was slightly extended for the use with CppCrate in order to support older compilers.
