@@ -1,0 +1,245 @@
+/*!
+
+\page cppcrateexamples How To Use CppCrate
+
+The following small code examples illustrate how to use %CppCrate. Feel free to contact the
+documentation of the used classes to get more information.
+
+\warning For real code do not forget to add proper error handling. You have been warned 😉
+
+
+
+
+
+
+\section cce_con Connection
+
+
+
+\subsection cce_con_simple Simple connection
+
+\code
+CppCrate::Client client;
+if (client.connect("http://localhost:4200")) { ... }
+\endcode
+
+or
+
+\code
+CppCrate::Client client;
+client.connect("http://localhost:4200");
+if (client.isConnected()) { ... }
+\endcode
+
+
+
+\subsection cce_con_multi Connect to a cluster and use all cluster nodes as fall-back
+
+\code
+// 1. Connect to the preferred node of the cluster
+CppCrate::Node preferredNode("http://localhost:4200");
+CppCrate::Client client;
+if (client.connect(preferredNode)) {
+  // 2. Get all nodes of the cluster
+  std::vector<CppCrate::Node> nodes = client.clusterNodes();
+  if (!nodes.empty()) {
+    // 3. If cluster nodes could be fetched, put the preferred node at front (optional)
+    auto it = std::find(nodes.begin(), nodes.end(), preferredNode);
+    if (it != nodes.end()) {
+      std::iter_swap(nodes.begin(), it);
+    }
+    // 4. Reconnect to "all" nodes.
+    client.connect(nodes);
+  }
+}
+if (client.isConnected()) {
+  // ...
+}
+\endcode
+
+
+
+
+
+
+\section cce_sql SQL Interface
+
+
+
+
+\subsection cce_sql-raw Just give me JSON!
+
+\code
+CppCrate::RawResult result = client.execRaw("SELECT name, port['http'] AS port FROM sys.nodes");
+if (result) {
+  std::cout << result.reply() << "\n";
+  // {"cols":["name","port"],"col_types":[4,9],
+  //  "rows":[["Ebenstein",4200]],"rowcount":1,"duration":...}
+}
+\endcode
+
+
+
+\subsection cce_sql-singleconv Let CppCrate do the JSON parsing
+
+\code
+CppCrate::Result result = client.exec("SELECT name, port['http'] AS port FROM sys.nodes");
+if (result && result.recordSize() > 0) {
+  CppCrate::Record record = result.record(0);
+  std::cout << record.value(0).asString() << "\n";   // index based access : Ebenstein
+  std::cout << record.value("port").asInt() << "\n"; // name based access  : 4200
+}
+\endcode
+
+
+
+\subsection cce_sql-raw2conv Wait, give me JSON and then, maybe, parse it...
+
+\code
+CppCrate::RawResult raw = client.execRaw("SELECT name, port['http'] AS port FROM sys.nodes");
+CppCrate::Result result(raw);
+\endcode
+
+
+
+\subsection cce_sql-browse Browse through a result set
+
+\code
+CppCrate::Result result = client.exec("SELECT name, port['http'] AS port FROM sys.nodes");
+if (result) {
+  for (int i = 0, total = result.recordSize(); i < total; ++i) {
+    CppCrate::Record record = result.record(i);
+    std::cout << record.value(0).asString() << " -- " << record.value(1).asInt() << "\n";
+  }
+}
+\endcode
+
+
+
+\subsection cce_sql-lazyschema Don't be verbose, use a default schema
+
+\code
+client.setDefaultSchema("sys");
+CppCrate::Result result = client.exec("SELECT name FROM nodes");
+// Automatically queries from the table "sys.nodes"
+\endcode
+
+
+
+\subsection cce_sql-prepare Prepare queries and reuse them (parameter substitution)
+
+\code
+CppCrate::Query query("SELECT age FROM players WHERE name = ?");
+// Query the age of Calvin
+query.setArguments("[\"Calvin\"]");
+client.exec(query);
+// Query the age of Hobbes
+query.setArguments("[\"Hobbes\"]");
+client.exec(query);
+\endcode
+
+
+
+\subsection cce_sql-bulk Bulk operation
+
+\code
+CppCrate::Query query("UPDATE players SET age = 8 WHERE name = ?");
+std::vector<std::string> bulk;
+bulk.emplace_back("[\"Calvin\"]");
+bulk.emplace_back("[\"Hobbes\"]");
+query.setBulkArguments(bulk);
+CppCrate::RawResult result = client.execRaw(query);
+if (!result.hasError()) {
+  // all rows updated.
+}
+\endcode
+
+
+
+\subsection cce_sql-hurry I'm in a hurry: change and get the results back immediately
+
+\code
+client.execRaw("UPDATE players SET age = 42");
+client.refresh();  // Forces Crate to refresh it's tables.
+client.execRaw("SELECT * FROM players");
+\endcode
+
+
+
+
+
+
+\section cppcrateexamples_blob Blob Interface
+
+
+
+\subsection cce_blob-create Create a new blob table
+
+\code
+client.createBlobStorage("myblob");
+\endcode
+
+
+
+\subsection cce_blob-create2 Create a new blob table and store it at /fs/myblob
+
+\code
+client.createBlobStorage("myblob", "/fs/myblob");
+\endcode
+
+
+
+\subsection cce_blob-upload Upload an image
+
+\code
+std::ifstream image;
+image.open("/path/to/image", std::ifstream::in | std::ifstream::binary);
+if (image) {
+  CppCrate::BlobResult result = client.uploadBlob("myblob", image);
+  if (result) {
+    // result.key() returns the key for the uploaded image,
+    // for example 93390aa9ed64e1e96149ceb0262f34aa2aedcffc
+  }
+}
+\endcode
+
+
+
+\subsection cce_blob-exists Check if an image exists
+
+\code
+if (client.existsBlob("myblob", "93390aa9ed64e1e96149ceb0262f34aa2aedcffc")) {
+  // Yeah!
+}
+\endcode
+
+
+
+\subsection cce_blob-down Now, get me the image back
+
+\code
+std::ofstream image;
+image.open("/path/where/to/download/the/image", std::ifstream::out | std::ifstream::binary);
+if (image) {
+  client.downloadBlob("myblob", "93390aa9ed64e1e96149ceb0262f34aa2aedcffc", image);
+}
+\endcode
+
+
+
+\subsection cce_blob-del The image is mine, delete it
+
+\code
+client.deleteBlob("myblob", "93390aa9ed64e1e96149ceb0262f34aa2aedcffc");
+
+\endcode
+
+
+
+\subsection cce_blob-delTable I have enough, delete the entire blob table
+
+\code
+client.removeBlobStorage("myblob");
+\endcode
+
+*/

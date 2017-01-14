@@ -1,0 +1,45 @@
+/*!
+
+\mainpage
+
+\section main_intro Introduction
+
+%CppCrate is a C++ interface for Crate (http://crate.io).
+It supports normal SQL based queries -- including statements with parameter substitution and bulk
+operations -- and provides an interface to manage blob data.
+
+
+
+\section main_howto Usage
+
+Using %CppCrate is straight forward: Create a client, connect to a node and make your request:
+
+\code
+CppCrate::Client client;
+if (client.connect("localhost:4200")) {
+  CppCrate::Result result = client.exec("SELECT id, name FROM players");
+  if (result) {
+    for (int i = 0, total = result.recordSize; i < total; ++i) {
+      CppCrate::Record record = result.record(i);
+      std::cout << "Result " << (i+1) << ": " << record.value("name").asString()
+                << " (" << record.value("id").asString() << ")\n";
+    }
+  }
+}
+\endcode
+
+For more small code examples have a look at \link cppcrateexamples how to use CppCrate\endlink.
+
+
+\section main_build Building CppCrate
+
+A full build instruction can be found in the README files in %CppCrate's git repository.
+[Just have a look there.](https://github.com/lorenzhaas/cppcrate)
+
+
+\section main_lic License
+
+%CppCrate is licensed under the Apache License, version 2.0. Copyright 2017 Lorenz Haas. For more
+information see the LICENSE file at the repository.
+
+*/
