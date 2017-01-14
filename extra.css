@@ -1,0 +1,402 @@
+@import url('https://fonts.googleapis.com/css?family=Titillium+Web:200,300,400,400i,600,600i');
+@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro');
+
+/*
+ * Hide not wanted generated content by Doxygen
+ */
+
+h2.memtitle, div.summary, div.levels, #nav-path, span.icona, #arr_0_ {
+  display: none;
+}
+
+
+
+/*
+ * General settings
+ */
+
+html, body, p, table, tr, td, div {
+  font: 400 18px/28px 'Titillium Web', sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  color: rgb(60,62,64);
+}
+
+h1, h2.groupheader {
+  font: 200 24px/48px 'Titillium Web', sans-serif;
+  color: rgb(42,44,46);
+  border-bottom: 1px solid rgb(140,144,148);
+  margin: 0;
+  padding: 0;
+  margin-bottom: 12px;
+}
+
+div.contents > h1,
+div.contents > h2.groupheader {
+  margin-top: 48px;
+}
+
+div.textblock > h1 {
+  margin-top: 48px;
+}
+
+div.textblock > h2 {
+  font: 600 20px/20px 'Titillium Web', sans-serif;
+  color: rgb(42,44,46);
+  margin-top: 48px;
+}
+
+a, a:link, a:visited, a:hover {
+  text-decoration: none;
+  color: rgb(88,153,37);
+}
+
+div.textblock {
+  padding: 0;
+}
+
+p {
+  padding-bottom: 12px;
+}
+
+div#footer {
+  border-top: 0.5px solid rgb(180,184,188);
+  margin-top: 96px;
+  margin-bottom: 48px;
+  text-align: center;
+  color: rgb(140,144,148);
+  font: 200 16px/32px 'Titillium Web', sans-serif;
+}
+
+
+
+/*
+ * Body
+ */
+
+div.contents {
+  padding: 0 12px;
+}
+
+
+
+/*
+ * Header
+ */
+
+#projectname {
+  font: 600 42px/64px 'Titillium Web', sans-serif;
+  color: rgb(42,44,46);
+  padding: 0 12px;
+}
+
+#projectnumber {
+  font: 400 22px/64px 'Titillium Web', sans-serif;
+  color: rgb(42,44,46);
+}
+
+
+
+/*
+ * Navigtion bar
+ */
+
+#main-nav {
+  background-color: rgb(167,209,135);
+  border-top:    1px solid rgb(113,155,81);
+  border-bottom: 1px solid rgb(113,155,81);
+}
+
+#main-nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: rgb(167,209,135);
+}
+
+#main-nav ul li {
+  float: left;
+}
+
+#main-nav ul li:last-child {
+  float: right;
+}
+
+#main-nav ul li a {
+  display: block;
+  color: rgb(42,44,46);
+  text-align: center;
+  padding: 6px 12px;
+  text-decoration: none;
+}
+
+#main-nav ul li a:hover {
+  color: rgb(255,255,255);
+  background-color: rgb(113,155,81);
+}
+
+div.title {
+  font: 200 24px/48px 'Titillium Web', sans-serif;
+  background-color: rgb(235,248,212);
+  border-bottom: 1px solid rgb(167,209,135);
+  padding: 0 12px;
+  margin-bottom: 18px;
+}
+
+div.title a {
+  color: inherit;
+  pointer-events: none;
+  cursor: inherit;
+}
+
+
+
+/*
+ * Class list
+ */
+
+div.directory {
+  margin-top: 12px;
+}
+
+table.directory {
+  border-top:    1px solid rgb(167,209,135);
+  border-bottom: 1px solid rgb(167,209,135);
+  border-collapse: collapse;
+}
+
+table.directory td.entry, table.directory td.desc {
+  padding: 9px 12px;
+  border-bottom: 1px dashed rgb(235,248,212);
+}
+
+table.directory td.entry {
+  white-space: nowrap;
+  vertical-align: top;
+  font-weight: 600;
+  background-color: rgb(252,255,243);
+}
+
+
+
+/*
+ * Class reference
+ */
+
+table.memberdecls {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 48px;
+}
+
+td.memSeparator {
+  display: none;
+}
+
+table.memberdecls td.memItemLeft, table.memberdecls td.memItemRight {
+  padding: 3px 6px;
+}
+
+table.memberdecls td.memItemLeft {
+  white-space: pre;
+  width: 1px;
+}
+
+div.memitem {
+  margin-bottom: 72px;
+}
+
+table.mlabels {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.memname {
+  border-collapse: collapse;
+}
+
+table.mlabels tr, table.mlabels td  {
+  padding: 0;
+  margin: 0;
+}
+
+table.memname tr, table.memname td {
+  padding: 0 3px;
+  margin: 0;
+}
+
+td.memname {
+  font-weight: 600;
+}
+
+td.paramname {
+  color: rgb(97,27,22);
+}
+
+td.paramname code {
+  font: inherit;
+}
+
+div.memproto {
+  border-bottom: 1px dotted rgb(200,202,204);
+}
+
+td.mlabels-right {
+  text-align: right;
+  vertical-align: bottom;
+}
+
+span.mlabel {
+  font: 400 12px/28px 'Titillium Web', sans-serif;
+  background-color: rgb(235,248,212);
+  border: 1px solid rgb(113,155,81);
+  padding: 2px 5px;
+}
+
+
+/*
+ * Enumerator
+ */
+
+table.fieldtable {
+  border-collapse: collapse;
+  border-top:    1px solid rgb(167,209,135);
+  border-bottom: 1px solid rgb(167,209,135);
+}
+
+table.fieldtable th {
+  color: rgb(42,44,46);
+  background-color: rgb(252,255,243);
+  border-bottom: 1px dashed rgb(167,209,135);
+  padding: 3px;
+}
+
+table.fieldtable tr td {
+  padding: 3px 12px;
+}
+
+table.fieldtable p {
+  margin: 0;
+  padding: 0;
+}
+
+table.fieldtable td.fieldname {
+  vertical-align: top;
+}
+
+
+/*
+ * Doxtable
+ */
+
+table.doxtable {
+  border-collapse: collapse;
+  border-top:    1px solid rgb(167,209,135);
+  border-bottom: 1px solid rgb(167,209,135);
+}
+
+table.doxtable th {
+  color: rgb(42,44,46);
+  background-color: rgb(252,255,243);
+  border-bottom: 1px dashed rgb(167,209,135);
+  padding: 3px;
+}
+
+table.doxtable tr td {
+  padding: 3px 12px;
+}
+
+table.doxtable p {
+  margin: 0;
+  padding: 0;
+}
+
+
+
+/*
+ * Code block
+ */
+
+div.fragment {
+    background-color: rgb(253,246,227);
+    color: rgb(101,123,131);
+    border: 1px solid rgb(238,232,213);
+    padding: 0.8em 0.8em;
+}
+
+div.fragment div.line {
+    font: 400 14px/22px 'Source Code Pro', monospace, fixed;
+    min-height: 14px;
+    white-space: pre-wrap;
+}
+
+div.fragment span.comment {
+    color: rgb(147,161,161);
+}
+
+div.fragment span.stringliteral {
+    color: rgb(42,161,152);
+}
+
+div.fragment a.code {
+    color: rgb(181,137,0);
+}
+
+p code {
+  font-family: 'Source Code Pro', monospace, fixed;
+  font-size: 86%;
+}
+
+
+
+/*
+ * Precondition and note
+ */
+
+dl.pre dd, dl.note dd, dl.warning dd {
+    margin-top: 6px;
+}
+
+dl.pre dt, dl.note dt, dl.warning dt {
+    color: rgb(42,44,46);
+}
+
+dl.pre {
+    border: 1px dashed rgb(220,50,47);
+    border-left: 12px solid rgb(220,50,47);
+    border-right: 4px solid rgb(220,50,47);
+    padding: 6px;
+}
+
+dl.note {
+    border: 1px dashed rgb(181,137,0);
+    border-left: 12px solid rgb(181,137,0);
+    border-right: 4px solid rgb(181,137,0);
+    padding: 6px;
+}
+
+dl.warning {
+    border: 1px dashed rgb(203,75,22);
+    border-left: 12px solid rgb(203,75,22);
+    border-right: 4px solid rgb(203,75,22);
+    padding: 6px;
+}
+
+
+
+/*
+ * ( 252,255,243 )
+ * 235,248,212
+ * 167,209,135
+ * 113,155,81
+ * 54,96,22
+ * red: 97,27,22
+ * purple: 92,50,125
+ * 60,62,64
+ * 42,44,46
+ * 92,92,92
+ */
