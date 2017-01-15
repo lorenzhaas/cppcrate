@@ -10,3 +10,4 @@ include_directories( ${CPPCRATE_INCLUDE_DIRS}
                      ${CMAKE_CURRENT_SOURCE_DIR} )
 
 add_custom_test( node )
+add_custom_test( rawresult )
