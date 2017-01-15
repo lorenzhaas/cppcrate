@@ -27,8 +27,9 @@ macro( custom_option OPTION_NAME OPTION_TEXT OPTION_DEFAULT )
 endmacro()
 
 message( STATUS "CppCrate options:" )
-custom_option( ENABLE_BLOB_SUPPORT  "If ON, blob support will be included."           ON  )
-custom_option( ENABLE_CPP11_SUPPORT "If ON, C++11 fetures are used."                  ON  )
+custom_option( ENABLE_BLOB_SUPPORT  "If ON, blob support will be included." ON  )
+custom_option( ENABLE_CPP11_SUPPORT "If ON, C++11 fetures are used." ON  )
+custom_option( BUILD_UNITTESTS      "If ON, the unit test will be build. (Needs ENABLE_CPP11_SUPPORT=ON)" OFF )
 
 
 
@@ -82,3 +83,22 @@ set( SHA1_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty )
 ####################################################################################################
 
 add_subdirectory( src )
+
+
+
+####################################################################################################
+##                                                                                                ##
+##  Include Google Test                                                                           ##
+##                                                                                                ##
+####################################################################################################
+
+if( BUILD_UNITTESTS AND ENABLE_CPP11_SUPPORT )
+    if( MSVC )
+        set( gtest_force_shared_crt ON )
+    endif()
+    add_subdirectory( 3rdparty/googletest )
+    set( GTEST_LIBRARIES      gtest )
+    set( GTEST_INCLUDE_DIRS   ${gtest_SOURCE_DIR}/include )
+    enable_testing()
+    add_subdirectory( tests )
+endif()
