@@ -9,7 +9,6 @@ branches:
 matrix:
   include:
     - os: linux
-      compiler: gcc
       env: COMPILER_NAME=gcc CXX=g++-6 CC=gcc-6 CXX_FLAGS="-std=c++98" ENABLE_BLOB_SUPPORT=0 ENABLE_CPP11_SUPPORT=0
       addons:
         apt:
@@ -17,7 +16,6 @@ matrix:
           packages: [g++-6, curl, libcurl4-openssl-dev]
 
     - os: linux
-      compiler: gcc
       env: COMPILER_NAME=gcc CXX=g++-6 CC=gcc-6 CXX_FLAGS="-std=c++98" ENABLE_BLOB_SUPPORT=1 ENABLE_CPP11_SUPPORT=0
       addons:
         apt:
@@ -25,7 +23,6 @@ matrix:
           packages: [g++-6, curl, libcurl4-openssl-dev]
 
     - os: linux
-      compiler: gcc
       env: COMPILER_NAME=gcc CXX=g++-6 CC=gcc-6 CXX_FLAGS="-std=c++11" ENABLE_BLOB_SUPPORT=0 ENABLE_CPP11_SUPPORT=1
       addons:
         apt:
@@ -33,7 +30,6 @@ matrix:
           packages: [g++-6, curl, libcurl4-openssl-dev]
 
     - os: linux
-      compiler: gcc
       env: COMPILER_NAME=gcc CXX=g++-6 CC=gcc-6 CXX_FLAGS="-std=c++11" ENABLE_BLOB_SUPPORT=1 ENABLE_CPP11_SUPPORT=1
       addons:
         apt:
@@ -41,11 +37,6 @@ matrix:
           packages: [g++-6, curl, libcurl4-openssl-dev]
 
 script:
-  - uname -a
-  - $CXX --version
-  - cmake --version
-  - echo $LANG
-  - echo $LC_ALL
   - mkdir build
   - cd build
   - cmake -DCMAKE_VERBOSE_MAKEFILE=ON .. && make
