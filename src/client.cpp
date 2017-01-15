@@ -129,8 +129,11 @@ class Client::Private {
     curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 25L);
     curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, curlError);
     curl_easy_setopt(curl, CURLOPT_COOKIEFILE, "");
+
+#ifdef CURL_AT_LEAST_VERSION
 #if CURL_AT_LEAST_VERSION(7, 25, 0)
     curl_easy_setopt(curl, CURLOPT_TCP_KEEPALIVE, 1L);
+#endif
 #endif
 
 #ifdef ENABLE_BLOB_SUPPORT
