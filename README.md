@@ -26,7 +26,7 @@ CppCrate::Client client;
 if (client.connect("localhost:4200")) {
   CppCrate::Result result = client.exec("SELECT id, name FROM players");
   if (result) {
-    for (int i = 0, total = result.recordSize; i < total; ++i) {
+    for (int i = 0, total = result.recordSize(); i < total; ++i) {
       CppCrate::Record record = result.record(i);
       std::cout << "Result " << (i+1) << ": " 
                 << record.value("name").asString()
