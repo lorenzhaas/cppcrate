@@ -12,6 +12,7 @@ include_directories( ${CPPCRATE_INCLUDE_DIRS}
 add_custom_test( node )
 add_custom_test( rawresult )
 add_custom_test( cratedatatype )
+add_custom_test( query )
 if( ENABLE_BLOB_SUPPORT )
     add_custom_test( blobresult )
 endif()
