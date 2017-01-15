@@ -1,6 +1,6 @@
 # CppCrate
 
-
+[![Build Status](https://travis-ci.org/lorenzhaas/cppcrate.svg?branch=master)](https://travis-ci.org/lorenzhaas/cppcrate)
 
 ## Introduction
 
