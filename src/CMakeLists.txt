@@ -38,3 +38,13 @@ endif()
 add_library( ${CPPCRATE_LIBRARIES} SHARED ${HEADERS_PUBLIC} ${SOURCES_IMPL} )
 
 target_link_libraries( ${CPPCRATE_LIBRARIES} ${CURL_LIBRARIES} )
+
+if( ENABLE_CPP11_SUPPORT )
+    if( CMAKE_COMPILER_IS_GNUCC )
+        target_compile_options( ${CPPCRATE_LIBRARIES} INTERFACE -std=c++11 )
+    endif()
+else()
+    if( CMAKE_COMPILER_IS_GNUCC )
+        target_compile_options( ${CPPCRATE_LIBRARIES} INTERFACE -std=c++98 )
+    endif()
+endif()

@@ -9,34 +9,38 @@ branches:
 matrix:
   include:
     - os: linux
-      env: COMPILER_NAME=gcc CXX=g++-6 CC=gcc-6 CXX_FLAGS="-std=c++98" ENABLE_BLOB_SUPPORT=0 ENABLE_CPP11_SUPPORT=0
+      compiler: gcc
+      env: COMPILER=g++-6 CMAKE_BUILD_TYPE=Release ENABLE_BLOB_SUPPORT=0 ENABLE_CPP11_SUPPORT=0
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: [g++-6, curl, libcurl4-openssl-dev]
+          packages: [g++-6, gcc-6, curl, libcurl4-openssl-dev]
 
     - os: linux
-      env: COMPILER_NAME=gcc CXX=g++-6 CC=gcc-6 CXX_FLAGS="-std=c++98" ENABLE_BLOB_SUPPORT=1 ENABLE_CPP11_SUPPORT=0
+      compiler: gcc
+      env: COMPILER=g++-6 CMAKE_BUILD_TYPE=Release ENABLE_BLOB_SUPPORT=1 ENABLE_CPP11_SUPPORT=0
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: [g++-6, curl, libcurl4-openssl-dev]
+          packages: [g++-6, gcc-6, curl, libcurl4-openssl-dev]
 
     - os: linux
-      env: COMPILER_NAME=gcc CXX=g++-6 CC=gcc-6 CXX_FLAGS="-std=c++11" ENABLE_BLOB_SUPPORT=0 ENABLE_CPP11_SUPPORT=1
+      compiler: gcc
+      env: COMPILER=g++-6 CMAKE_BUILD_TYPE=Release ENABLE_BLOB_SUPPORT=0 ENABLE_CPP11_SUPPORT=1
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: [g++-6, curl, libcurl4-openssl-dev]
+          packages: [g++-6, gcc-6, curl, libcurl4-openssl-dev]
 
     - os: linux
-      env: COMPILER_NAME=gcc CXX=g++-6 CC=gcc-6 CXX_FLAGS="-std=c++11" ENABLE_BLOB_SUPPORT=1 ENABLE_CPP11_SUPPORT=1
+      compiler: gcc
+      env: COMPILER=g++-6 CMAKE_BUILD_TYPE=Release ENABLE_BLOB_SUPPORT=1 ENABLE_CPP11_SUPPORT=1
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: [g++-6, curl, libcurl4-openssl-dev]
+          packages: [g++-6, gcc-6, curl, libcurl4-openssl-dev]
 
 script:
   - mkdir build
   - cd build
-  - cmake -DCMAKE_VERBOSE_MAKEFILE=ON .. && make
+  - cmake -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_COMPILER=$COMPILER .. && make

@@ -29,23 +29,6 @@ endmacro()
 message( STATUS "CppCrate options:" )
 custom_option( ENABLE_BLOB_SUPPORT  "If ON, blob support will be included."           ON  )
 custom_option( ENABLE_CPP11_SUPPORT "If ON, C++11 fetures are used."                  ON  )
-custom_option( DEVELOPER_BUILD      "If ON, some special compiler flags will be set." OFF )
-
-
-
-####################################################################################################
-##                                                                                                ##
-##  Development options                                                                           ##
-##                                                                                                ##
-####################################################################################################
-
-if( DEVELOPER_BUILD )
-    if( NOT ENABLE_CPP11_SUPPORT )
-        if( CMAKE_COMPILER_IS_GNUCC )
-            set( CMAKE_CXX_FLAGS "-std=c++98 -pedantic" )
-        endif()
-    endif()
-endif()
 
 
 
