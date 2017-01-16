@@ -1,6 +1,7 @@
 # CppCrate
 
 [![Build Status](https://travis-ci.org/lorenzhaas/cppcrate.svg?branch=master)](https://travis-ci.org/lorenzhaas/cppcrate)
+[![Documentation](https://img.shields.io/badge/docs-doxygen-blue.svg)](https://lorenzhaas.github.io/cppcrate)
 
 ## Introduction
 
