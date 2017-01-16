@@ -32,13 +32,29 @@ matrix:
           sources: ['ubuntu-toolchain-r-test']
           packages: [g++-6, gcc-6, curl, libcurl4-openssl-dev]
 
-    - os: linux
-      compiler: gcc
-      env: COMPILER=g++-6 CMAKE_BUILD_TYPE=Release ENABLE_BLOB_SUPPORT=1 ENABLE_CPP11_SUPPORT=1
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: [g++-6, gcc-6, curl, libcurl4-openssl-dev]
+- os: linux
+  compiler: gcc
+  env: COMPILER=g++-6 CMAKE_BUILD_TYPE=Release ENABLE_BLOB_SUPPORT=1 ENABLE_CPP11_SUPPORT=1
+  addons:
+    apt:
+      sources: ['ubuntu-toolchain-r-test']
+      packages: [g++-6, gcc-6, curl, libcurl4-openssl-dev]
+
+- os: linux
+  compiler: gcc
+  env: COMPILER=g++-6 CMAKE_BUILD_TYPE=DEBUG BUILD_UNITTESTS=1 ENABLE_BLOB_SUPPORT=1 ENABLE_CPP11_SUPPORT=1
+  addons:
+    apt:
+      sources: ['ubuntu-toolchain-r-test']
+      packages: [g++-6, gcc-6, curl, libcurl4-openssl-dev, lcov]
+  before_install:
+    - gem install coveralls-lcov
+  after_success:
+    - ctest -C Debug -V
+    - lcov --directory src --capture --output-file coverage.info
+    - lcov --remove coverage.info 'test/3rdparty/*' '/usr/*' --output-file coverage.info
+    - lcov --list coverage.info
+    - coveralls-lcov coverage.info
 
 script:
   - mkdir build

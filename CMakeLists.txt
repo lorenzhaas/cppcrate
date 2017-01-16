@@ -35,6 +35,24 @@ custom_option( BUILD_UNITTESTS      "If ON, the unit test will be build. (Needs 
 
 ####################################################################################################
 ##                                                                                                ##
+##  Set compiler flags                                                                            ##
+##                                                                                                ##
+####################################################################################################
+
+if( ENABLE_CPP11_SUPPORT )
+    if( CMAKE_COMPILER_IS_GNUCC )
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+    endif()
+else()
+    if( CMAKE_COMPILER_IS_GNUCC )
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++98")
+    endif()
+endif()
+
+
+
+####################################################################################################
+##                                                                                                ##
 ##  Include documentation                                                                         ##
 ##                                                                                                ##
 ####################################################################################################
