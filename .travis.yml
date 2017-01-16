@@ -32,31 +32,33 @@ matrix:
           sources: ['ubuntu-toolchain-r-test']
           packages: [g++-6, gcc-6, curl, libcurl4-openssl-dev]
 
-- os: linux
-  compiler: gcc
-  env: COMPILER=g++-6 CMAKE_BUILD_TYPE=Release ENABLE_BLOB_SUPPORT=1 ENABLE_CPP11_SUPPORT=1
-  addons:
-    apt:
-      sources: ['ubuntu-toolchain-r-test']
-      packages: [g++-6, gcc-6, curl, libcurl4-openssl-dev]
+    - os: linux
+      compiler: gcc
+      env: COMPILER=g++-6 CMAKE_BUILD_TYPE=Release ENABLE_BLOB_SUPPORT=1 ENABLE_CPP11_SUPPORT=1
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: [g++-6, gcc-6, curl, libcurl4-openssl-dev]
 
-- os: linux
-  compiler: gcc
-  env: COMPILER=g++-6 CMAKE_BUILD_TYPE=DEBUG BUILD_UNITTESTS=1 ENABLE_BLOB_SUPPORT=1 ENABLE_CPP11_SUPPORT=1
-  addons:
-    apt:
-      sources: ['ubuntu-toolchain-r-test']
-      packages: [g++-6, gcc-6, curl, libcurl4-openssl-dev, lcov]
-  before_install:
-    - gem install coveralls-lcov
-  after_success:
-    - ctest -C Debug -V
-    - lcov --directory src --capture --output-file coverage.info
-    - lcov --remove coverage.info 'test/3rdparty/*' '/usr/*' --output-file coverage.info
-    - lcov --list coverage.info
-    - coveralls-lcov coverage.info
+    - os: linux
+      compiler: gcc
+      env: COMPILER=g++-6 CMAKE_BUILD_TYPE=DEBUG BUILD_UNITTESTS=1 ENABLE_BLOB_SUPPORT=1 ENABLE_CPP11_SUPPORT=1
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: [g++-6, gcc-6, curl, libcurl4-openssl-dev, lcov]
+
+before_install:
+  - if [[ "$BUILD_UNITTESTS" == "1" ]]; then gem install coveralls-lcov ; fi
 
 script:
   - mkdir build
   - cd build
   - cmake -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_COMPILER=$COMPILER .. && make
+  - if [[ "$BUILD_UNITTESTS" == "1" ]]; then ctest -C Debug -V ; fi
+
+after_success:
+  - if [[ "$BUILD_UNITTESTS" == "1" ]]; then lcov --directory src --capture --output-file coverage.info                         ; fi
+  - if [[ "$BUILD_UNITTESTS" == "1" ]]; then lcov --remove coverage.info 'test/3rdparty/*' '/usr/*' --output-file coverage.info ; fi
+  - if [[ "$BUILD_UNITTESTS" == "1" ]]; then lcov --list coverage.info                                                          ; fi
+  - if [[ "$BUILD_UNITTESTS" == "1" ]]; then coveralls-lcov coverage.info                                                       ; fi
