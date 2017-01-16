@@ -26,8 +26,59 @@ TEST(RecordTests, Contructors) {
   EXPECT_EQ(v2, r2.value("b"));
   EXPECT_EQ(v2.name(), "b");
   EXPECT_EQ(v2.crateType().type(), CrateDataType::String);
-  EXPECT_EQ(v2.asString(), "Hobbes");
+
+  Record r3("invalid", {}, {});
+  EXPECT_EQ(r3.size(), 0);
 }
+
+struct ConstructorData {
+  std::string data;
+  std::vector<std::string> names;
+  std::vector<CppCrate::CrateDataType::Type> types;
+  bool success;
+};
+
+class RecordTests : public testing::TestWithParam<ConstructorData> {};
+
+TEST_P(RecordTests, ContructorsVariants) {
+  using CppCrate::Record;
+  using CppCrate::CrateDataType;
+  using CppCrate::Value;
+
+  ConstructorData data = GetParam();
+  std::vector<CrateDataType> types;
+  for (CrateDataType::Type t : data.types) types.emplace_back(t);
+
+  Record r(data.data, data.names, types);
+  EXPECT_EQ(r.size(), 1);
+  EXPECT_EQ(r.value(0).crateType(), types.front());
+  if (!data.success) EXPECT_EQ(r.value(0).type(), Value::StringType);
+}
+
+INSTANTIATE_TEST_CASE_P(
+    ContructorsVariants, RecordTests,
+    ::testing::Values(
+        ConstructorData{"[null]", {"a"}, {CppCrate::CrateDataType::Null}, true},
+        ConstructorData{"[1]", {"a"}, {CppCrate::CrateDataType::NotSupported}, true},
+        ConstructorData{"[1]", {"a"}, {CppCrate::CrateDataType::Byte}, true},
+        ConstructorData{"[true]", {"a"}, {CppCrate::CrateDataType::Boolean}, true},
+        ConstructorData{"[\"Calvin\"]", {"a"}, {CppCrate::CrateDataType::String}, true},
+        ConstructorData{"[\"1.1.1.1\"]", {"a"}, {CppCrate::CrateDataType::Ip}, true},
+        ConstructorData{"[1.2]", {"a"}, {CppCrate::CrateDataType::Double}, true},
+        ConstructorData{"[1.3]", {"a"}, {CppCrate::CrateDataType::Float}, true},
+        ConstructorData{"[1]", {"a"}, {CppCrate::CrateDataType::Short}, true},
+        ConstructorData{"[1]", {"a"}, {CppCrate::CrateDataType::Integer}, true},
+        ConstructorData{"[1]", {"a"}, {CppCrate::CrateDataType::Long}, true},
+        ConstructorData{"[1]", {"a"}, {CppCrate::CrateDataType::Timestamp}, true},
+        ConstructorData{"[{}]", {"a"}, {CppCrate::CrateDataType::Object}, true},
+        ConstructorData{"[{}]", {"a"}, {CppCrate::CrateDataType::GeoPoint}, true},
+        ConstructorData{"[{}]", {"a"}, {CppCrate::CrateDataType::GeoShape}, true},
+        ConstructorData{"[[]]", {"a"}, {CppCrate::CrateDataType::Array}, true},
+        ConstructorData{"[1]", {"a"}, {CppCrate::CrateDataType::Set}, true},
+        ConstructorData{"[1.2]", {"a"}, {CppCrate::CrateDataType::Byte}, false},
+        ConstructorData{"[1.2]", {"a"}, {CppCrate::CrateDataType::Integer}, false},
+        ConstructorData{"[1.2]", {"a"}, {CppCrate::CrateDataType::Long}, false},
+        ConstructorData{"[1.2]", {"a"}, {CppCrate::CrateDataType::Timestamp}, false}));
 
 TEST(RecordTests, Size) {
   using CppCrate::Record;
