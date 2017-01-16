@@ -59,6 +59,6 @@ script:
 
 after_success:
   - if [[ "$BUILD_UNITTESTS" == "1" ]]; then lcov --directory src --capture --output-file coverage.info                         ; fi
-  - if [[ "$BUILD_UNITTESTS" == "1" ]]; then lcov --remove coverage.info 'test/3rdparty/*' '/usr/*' --output-file coverage.info ; fi
+  - if [[ "$BUILD_UNITTESTS" == "1" ]]; then lcov --remove coverage.info '3rdparty/*' '/usr/*' --output-file coverage.info ; fi
   - if [[ "$BUILD_UNITTESTS" == "1" ]]; then lcov --list coverage.info                                                          ; fi
   - if [[ "$BUILD_UNITTESTS" == "1" ]]; then coveralls-lcov coverage.info                                                       ; fi
