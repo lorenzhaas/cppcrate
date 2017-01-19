@@ -119,7 +119,11 @@ class Client::Private {
   ~Private() { disconnect(); }
 
   bool connect() {
-    if (curl) disconnect();
+    if (curl) {
+      std::vector<Node> tmp = nodes;
+      disconnect();
+      nodes = tmp;
+    }
     curl = curl_easy_init();
     if (!curl) return false;
 
