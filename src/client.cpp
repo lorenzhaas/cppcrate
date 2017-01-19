@@ -465,7 +465,7 @@ class Client::Private {
         setNodeSuccess();
       } else {
         if (setNodeError()) {
-          return deleteBlob(tableName, key);
+          return downloadBlob(tableName, key, data);
         }
         r.setErrorString(curlError, BlobResult::HttpErrorType);
       }
