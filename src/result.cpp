@@ -154,7 +154,7 @@ Result::Result(const RawResult& raw) : p(new Private) {
   if (doc.HasMember("rowcount")) {
     const rapidjson::Value& rowcount = doc["rowcount"];
     if (rowcount.IsInt()) {
-      p->duration = rowcount.GetInt();
+      p->rowCount = rowcount.GetInt();
     }
   }
 
