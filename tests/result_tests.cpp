@@ -3,7 +3,7 @@
 #include <cppcrate/client.h>
 #include <cppcrate/result.h>
 
-TEST(NodeTests, ContructorNormal) {
+TEST(ResultTests, ContructorNormal) {
   using CppCrate::Result;
   using CppCrate::Record;
   using CppCrate::RawResult;
@@ -47,7 +47,7 @@ TEST(NodeTests, ContructorNormal) {
   EXPECT_TRUE(result);
 }
 
-TEST(NodeTests, ContructorErroneous) {
+TEST(ResultTests, ContructorErroneous) {
   using CppCrate::Result;
   using CppCrate::RawResult;
 
@@ -89,7 +89,7 @@ TEST(NodeTests, ContructorErroneous) {
   EXPECT_NE(result.errorString(), "");
 }
 
-TEST(NodeTests, Equal) {
+TEST(ResultTests, Equal) {
   using CppCrate::Result;
   using CppCrate::RawResult;
 
