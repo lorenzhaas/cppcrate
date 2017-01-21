@@ -89,7 +89,7 @@ class Query::Private {
 CPPCRATE_PIMPL_IMPLEMENT_ALL(Query)
 
 /*!
- * Constructs a query with the SQL statement \a sql.
+ * Constructs a query with the SQL statement \a sql. If \a sql is empty the query is also empty.
  */
 Query::Query(const std::string &sql) : p(new Private) { p->sql = sql; }
 
@@ -115,7 +115,12 @@ Query::Query(const std::string &sql, const std::vector<std::string> &bulkArgs) :
 }
 
 /*!
- * Returns the query's type.
+ * Returns \c true if neither statement, nor arguments, nor bulk arguments are defined.
+ */
+bool Query::isEmpty() const { return p->sql.empty() && p->args.empty() && p->bulkArgs.empty(); }
+
+/*!
+ * Returns the query's type. An empty query is considered a simple type (SimpleType).
  */
 Query::Type Query::type() const {
   return hasArguments() ? ArgumentType : (hasBulkArguments() ? BulkArgumentType : SimpleType);
@@ -130,6 +135,11 @@ void Query::setStatement(const std::string &sql) { p->sql = sql; }
  * Returns the SQL statement.
  */
 const std::string &Query::statement() const { return p->sql; }
+
+/*!
+ * Returns whether the query has a statement defined.
+ */
+bool Query::hasStatement() const { return !p->sql.empty(); }
 
 /*!
  * Sets the parameters to \a args.

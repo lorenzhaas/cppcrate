@@ -30,14 +30,16 @@ class CPPCRATE_EXPORT Query {
  public:
   enum Type { SimpleType, ArgumentType, BulkArgumentType };
 
-  explicit Query(const std::string &sql);
+  explicit Query(const std::string &sql = "");
   Query(const std::string &sql, const std::string &args);
   Query(const std::string &sql, const std::vector<std::string> &bulkArgs);
 
+  bool isEmpty() const;
   Type type() const;
 
   void setStatement(const std::string &sql);
   const std::string &statement() const;
+  bool hasStatement() const;
 
   void setArguments(const std::string &args);
   const std::string &arguments() const;

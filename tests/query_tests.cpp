@@ -9,6 +9,8 @@ TEST(QueryTests, Contructors) {
   EXPECT_EQ(q.statement(), "a");
   EXPECT_EQ(q.arguments(), "");
   EXPECT_EQ(q.bulkArguments(), std::vector<std::string>());
+  EXPECT_FALSE(q.isEmpty());
+  EXPECT_TRUE(q.hasStatement());
   EXPECT_FALSE(q.hasArguments());
   EXPECT_FALSE(q.hasBulkArguments());
 
@@ -16,6 +18,7 @@ TEST(QueryTests, Contructors) {
   EXPECT_EQ(q2.statement(), "a");
   EXPECT_EQ(q2.arguments(), "b");
   EXPECT_EQ(q2.bulkArguments(), std::vector<std::string>());
+  EXPECT_TRUE(q.hasStatement());
   EXPECT_TRUE(q2.hasArguments());
   EXPECT_FALSE(q2.hasBulkArguments());
 
@@ -36,6 +39,8 @@ TEST(QueryTests, Type) {
 
   Query q("a");
   EXPECT_EQ(q.type(), Query::SimpleType);
+  q.setStatement("");
+  EXPECT_EQ(q.type(), Query::SimpleType);
 
   Query q2("a", "b");
   EXPECT_EQ(q2.type(), Query::ArgumentType);
@@ -52,10 +57,13 @@ TEST(QueryTests, Statement) {
 
   Query q("");
   EXPECT_EQ(q.statement(), "");
+  EXPECT_FALSE(q.hasStatement());
   q.setStatement("a");
   EXPECT_EQ(q.statement(), "a");
+  EXPECT_TRUE(q.hasStatement());
   q.setStatement("");
   EXPECT_EQ(q.statement(), "");
+  EXPECT_FALSE(q.hasStatement());
 }
 
 TEST(QueryTests, Arguments) {
@@ -83,6 +91,33 @@ TEST(QueryTests, BulkArguments) {
   EXPECT_EQ(q.bulkArguments(), ba);
   q.setBulkArguments(emptyBa);
   EXPECT_EQ(q.bulkArguments(), emptyBa);
+}
+
+TEST(QueryTests, IsEmpty) {
+  using CppCrate::Query;
+
+  std::vector<std::string> ba;
+  ba.emplace_back("a");
+  ba.emplace_back("b");
+
+  Query q;
+  EXPECT_TRUE(q.isEmpty());
+
+  q.setStatement("a");
+  EXPECT_FALSE(q.isEmpty());
+  q.setStatement("");
+  EXPECT_TRUE(q.isEmpty());
+
+  q.setArguments("a");
+  EXPECT_FALSE(q.isEmpty());
+  q.setStatement("a");
+  EXPECT_FALSE(q.isEmpty());
+
+  q.setStatement("");
+  q.setBulkArguments(ba);
+  EXPECT_FALSE(q.isEmpty());
+  q.setStatement("a");
+  EXPECT_FALSE(q.isEmpty());
 }
 
 TEST(QueryTests, BulkArgumentsAndArguments) {
