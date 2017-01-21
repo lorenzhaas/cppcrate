@@ -179,11 +179,11 @@ class Client::Private {
   }
 
   void setAuthentication(const Node& node) {
-    if (!node.user().empty()) {
+    if (node.hasHttpAuthenticationInformation()) {
       curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-      const std::string& user = nodes.front().user();
+      const std::string& user = nodes.front().httpUser();
       curl_easy_setopt(curl, CURLOPT_USERNAME, user.data());
-      const std::string& password = nodes.front().password();
+      const std::string& password = nodes.front().httpPassword();
       curl_easy_setopt(curl, CURLOPT_PASSWORD, password.data());
     } else {
       curl_easy_setopt(curl, CURLOPT_HTTPAUTH, 0L);

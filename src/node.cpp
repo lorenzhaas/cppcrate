@@ -24,16 +24,16 @@ namespace CppCrate {
  * \brief Encapsulates the information needed to connect to a Crate cluster node.
  *
  * The class %Node encapsulates the information needed to connect to a Crate cluster node.
- * If a user and password is set CURL picks the best suitable authentication automatically
+ * If a HTTP user and HTTP password is set CURL picks the best suitable authentication automatically
  * ([CURLAUTH_ANY](https://curl.haxx.se/libcurl/c/CURLOPT_HTTPAUTH.html#CURLAUTHANY)).
  *
- * The setup for a node that is password protected could -- for example -- look like:
+ * The setup for a node that is HTTP password protected could -- for example -- look like:
  *
  * \code
  * Node node;
  * node.setUrl("http://localhost:4200");
- * node.setUser("Hobbes");
- * node.setPassword("magic_tiger");
+ * node.setHttpUser("Hobbes");
+ * node.setHttpPassword("magic_tiger");
  * \endcode
  */
 
@@ -41,29 +41,40 @@ namespace CppCrate {
 class Node::Private {
  public:
   bool operator==(const Private &other) const {
-    return url == other.url && user == other.user && password == other.password;
+    return url == other.url && httpUser == other.httpUser && httpPassword == other.httpPassword;
   }
   std::string url;
-  std::string user;
-  std::string password;
+  std::string httpUser;
+  std::string httpPassword;
 };
 /// \endcond
 
 CPPCRATE_PIMPL_IMPLEMENT_ALL(Node)
 
 /*!
+ * Constructs an empty node.
+ */
+Node::Node() : p(new Private) {}
+
+/*!
  * Constructs a node that connects to the URL \a url.
+ *
+ * \todo As soon as Crate supports authentication extend this constructor by user and password.
  */
 Node::Node(const std::string &url) : p(new Private) { p->url = url; }
 
 /*!
- * Constructs a node that connects to the URL \a url with the credentials \a user and \a password.
+ * Returns \c true if neither the URL, nor a HTTP user, nor a HTTP password is defined.
  */
-Node::Node(const std::string &url, const std::string &user, const std::string &password)
-    : p(new Private) {
-  p->url = url;
-  p->user = user;
-  p->password = password;
+bool Node::isEmpty() const {
+  return p->url.empty() && p->httpUser.empty() && p->httpPassword.empty();
+}
+
+/*!
+ * Returns \c true if at least HTTP user or HTTP password is defined.
+ */
+bool Node::hasHttpAuthenticationInformation() const {
+  return !p->httpUser.empty() || !p->httpPassword.empty();
 }
 
 /*!
@@ -87,23 +98,34 @@ std::string Node::url(const std::string &path) const { return p->url + path; }
 void Node::setUrl(const std::string &url) { p->url = url; }
 
 /*!
- * Returns the user used to connect to the node.
+ * Sets the HTTP user used to connect to the node to \a user and the HTTP password used to connect
+ * to the node to \a password.
+ *
+ * This is a short hand for setHttpUser() and setHttpPassword().
  */
-const std::string &Node::user() const { return p->user; }
+void Node::setHttpAuthentication(const std::string &user, const std::string &password) {
+  p->httpUser = user;
+  p->httpPassword = password;
+}
 
 /*!
- * Sets the user used to connect to the node to \a user.
+ * Returns the HTTP user used to connect to the node.
  */
-void Node::setUser(const std::string &user) { p->user = user; }
+const std::string &Node::httpUser() const { return p->httpUser; }
 
 /*!
- * Returns the password used to connect to the node.
+ * Sets the HTTP user used to connect to the node to \a user.
  */
-const std::string &Node::password() const { return p->password; }
+void Node::setHttpUser(const std::string &user) { p->httpUser = user; }
 
 /*!
- * Sets the password used to connect to the node to \a password.
+ * Returns the HTTP password used to connect to the node.
  */
-void Node::setPassword(const std::string &password) { p->password = password; }
+const std::string &Node::httpPassword() const { return p->httpPassword; }
+
+/*!
+ * Sets the HTTP password used to connect to the node to \a password.
+ */
+void Node::setHttpPassword(const std::string &password) { p->httpPassword = password; }
 
 }  // namespace CppCrate

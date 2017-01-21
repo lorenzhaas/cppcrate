@@ -6,14 +6,83 @@ TEST(NodeTests, Contructors) {
   using CppCrate::Node;
 
   Node node;
-  EXPECT_EQ(node.url(), "http://localhost:4200");
-  EXPECT_EQ(node.user(), "");
-  EXPECT_EQ(node.password(), "");
+  EXPECT_EQ(node.url(), "");
+  EXPECT_EQ(node.httpUser(), "");
+  EXPECT_EQ(node.httpPassword(), "");
 
-  Node node2("a", "b", "c");
+  Node node2("a");
   EXPECT_EQ(node2.url(), "a");
-  EXPECT_EQ(node2.user(), "b");
-  EXPECT_EQ(node2.password(), "c");
+  node2.setHttpAuthentication("b", "c");
+  EXPECT_EQ(node2.httpUser(), "b");
+  EXPECT_EQ(node2.httpPassword(), "c");
+}
+
+TEST(NodeTests, IsEmpty) {
+  using CppCrate::Node;
+
+  EXPECT_TRUE(Node().isEmpty());
+  EXPECT_TRUE(Node("").isEmpty());
+
+  Node node("");
+  node.setHttpAuthentication("", "");
+  EXPECT_TRUE(node.isEmpty());
+
+  node.setUrl("a");
+  EXPECT_FALSE(node.isEmpty());
+
+  node.setUrl("");
+  node.setHttpAuthentication("a", "");
+  EXPECT_FALSE(node.isEmpty());
+
+  node.setHttpAuthentication("", "a");
+  EXPECT_FALSE(node.isEmpty());
+
+  node.setHttpAuthentication("a", "a");
+  EXPECT_FALSE(node.isEmpty());
+}
+
+TEST(NodeTests, HasAuthenticationInformation) {
+  using CppCrate::Node;
+
+  EXPECT_FALSE(Node().hasHttpAuthenticationInformation());
+  EXPECT_FALSE(Node("").hasHttpAuthenticationInformation());
+
+  Node node("");
+  node.setHttpAuthentication("", "");
+  EXPECT_FALSE(node.hasHttpAuthenticationInformation());
+
+  node.setUrl("a");
+  EXPECT_FALSE(node.hasHttpAuthenticationInformation());
+
+  node.setUrl("");
+  node.setHttpAuthentication("a", "");
+  EXPECT_TRUE(node.hasHttpAuthenticationInformation());
+
+  node.setHttpAuthentication("", "a");
+  EXPECT_TRUE(node.hasHttpAuthenticationInformation());
+
+  node.setHttpAuthentication("a", "a");
+  EXPECT_TRUE(node.hasHttpAuthenticationInformation());
+}
+
+TEST(NodeTests, SetHttpAuthentication) {
+  using CppCrate::Node;
+  Node node;
+  node.setHttpAuthentication("", "");
+  EXPECT_EQ(node.httpUser(), "");
+  EXPECT_EQ(node.httpPassword(), "");
+
+  node.setHttpAuthentication("a", "");
+  EXPECT_EQ(node.httpUser(), "a");
+  EXPECT_EQ(node.httpPassword(), "");
+
+  node.setHttpAuthentication("", "a");
+  EXPECT_EQ(node.httpUser(), "");
+  EXPECT_EQ(node.httpPassword(), "a");
+
+  node.setHttpAuthentication("a", "b");
+  EXPECT_EQ(node.httpUser(), "a");
+  EXPECT_EQ(node.httpPassword(), "b");
 }
 
 TEST(NodeTests, Url) {
@@ -34,20 +103,20 @@ TEST(NodeTests, User) {
   using CppCrate::Node;
 
   Node node;
-  node.setUser("a");
-  EXPECT_EQ(node.user(), "a");
-  node.setUser("");
-  EXPECT_EQ(node.user(), "");
+  node.setHttpUser("a");
+  EXPECT_EQ(node.httpUser(), "a");
+  node.setHttpUser("");
+  EXPECT_EQ(node.httpUser(), "");
 }
 
 TEST(NodeTests, Password) {
   using CppCrate::Node;
 
   Node node;
-  node.setPassword("a");
-  EXPECT_EQ(node.password(), "a");
-  node.setPassword("");
-  EXPECT_EQ(node.password(), "");
+  node.setHttpPassword("a");
+  EXPECT_EQ(node.httpPassword(), "a");
+  node.setHttpPassword("");
+  EXPECT_EQ(node.httpPassword(), "");
 }
 
 TEST(NodeTests, Equal) {
@@ -63,14 +132,14 @@ TEST(NodeTests, Equal) {
   b.setUrl("a");
   EXPECT_EQ(a, b);
 
-  a.setUser("a");
+  a.setHttpUser("a");
   EXPECT_NE(a, b);
-  b.setUser("a");
+  b.setHttpUser("a");
   EXPECT_EQ(a, b);
 
-  a.setPassword("a");
+  a.setHttpPassword("a");
   EXPECT_NE(a, b);
-  b.setPassword("a");
+  b.setHttpPassword("a");
   EXPECT_EQ(a, b);
 }
 

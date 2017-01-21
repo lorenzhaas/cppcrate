@@ -83,7 +83,9 @@ TEST(ClientTests, UnaccessibleNodesWithAuthentication) {
 
   std::vector<Node> nodes;
   nodes.push_back(Node("foo://bar"));
-  nodes.push_back(Node("foo://bar", "user", "pass"));
+  Node n("foo://bar");
+  n.setHttpAuthentication("user", "pass");
+  nodes.push_back(n);
 
   std::vector<Client::ConnectionOptions> options;
   options.emplace_back(Client::ConnectToFirstNodeAlways);
