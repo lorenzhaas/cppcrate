@@ -490,9 +490,6 @@ CPPCRATE_PIMPL_IMPLEMENT_PRIVATE(Client)
 
 /*!
  * Constructs a not connected client.
- *
- * \warning Using any function - except connect() and disconnect() - of a not connected client is
- *          undefined behavior!
  */
 Client::Client() : p(new Private) {}
 
@@ -539,9 +536,6 @@ bool Client::connect(const std::vector<Node>& nodes, ConnectionOptions options) 
 
 /*!
  * Disconnects the client from the Crate cluster.
- *
- * \warning Using any function - except connect() and disconnect() - of a not connected client is
- *          undefined behavior!
  */
 void Client::disconnect() { p->disconnect(); }
 
