@@ -127,7 +127,7 @@ class Value::Private {
     switch (dataType) {
       case InvalidType:  // [[fallthrough]]
       case NullType:
-        return true;
+        break;
       case BoolType:
         return data.b == other.data.b;
       case Int16Type:
