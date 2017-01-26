@@ -17,7 +17,7 @@
 #pragma once
 
 #if defined(_WIN32)
-#if defined(CppCrate_EXPORTS)
+#if defined(CPPCRATE_LIBRARY)
 #define CPPCRATE_EXPORT __declspec(dllexport)
 #else
 #define CPPCRATE_EXPORT __declspec(dllimport)
