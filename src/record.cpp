@@ -15,6 +15,7 @@
  */
 
 #include <cppcrate/record.h>
+#include "global_p.h"
 
 #include <cppcrate/value.h>
 

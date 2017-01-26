@@ -15,6 +15,7 @@
  */
 
 #include <cppcrate/value.h>
+#include "global_p.h"
 
 #include <sstream>
 

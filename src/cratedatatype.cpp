@@ -15,6 +15,7 @@
  */
 
 #include <cppcrate/cratedatatype.h>
+#include "global_p.h"
 
 namespace CppCrate {
 

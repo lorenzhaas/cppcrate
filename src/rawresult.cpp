@@ -15,6 +15,7 @@
  */
 
 #include <cppcrate/rawresult.h>
+#include "global_p.h"
 
 #include <rapidjson/document.h>
 

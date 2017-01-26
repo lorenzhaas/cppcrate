@@ -15,6 +15,7 @@
  */
 
 #include <cppcrate/client.h>
+#include "global_p.h"
 
 #ifdef ENABLE_BLOB_SUPPORT
 #include "crypto.h"

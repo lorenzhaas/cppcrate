@@ -15,6 +15,7 @@
  */
 
 #include <cppcrate/node.h>
+#include "global_p.h"
 
 namespace CppCrate {
 

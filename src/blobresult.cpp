@@ -15,6 +15,7 @@
  */
 
 #include <cppcrate/blobresult.h>
+#include "global_p.h"
 
 namespace CppCrate {
 

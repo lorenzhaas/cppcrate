@@ -16,7 +16,8 @@ set( HEADERS_PUBLIC  ${CPPCRATE_INCLUDE_DIRS}/cppcrate/global.h
                      ${CPPCRATE_INCLUDE_DIRS}/cppcrate/query.h
                      ${CPPCRATE_INCLUDE_DIRS}/cppcrate/record.h )
 
-set( SOURCES_IMPL    client.cpp
+set( SOURCES_IMPL    global_p.h
+                     client.cpp
                      node.cpp
                      rawresult.cpp
                      result.cpp

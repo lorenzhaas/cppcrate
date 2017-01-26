@@ -38,32 +38,14 @@ using std::int64_t;
   CPPCRATE_PIMPL_DECLARE_COPY(Class)      \
   CPPCRATE_PIMPL_DECLARE_MOVE(Class)      \
   CPPCRATE_PIMPL_DECLARE_COMPARISON(Class)
-#define CPPCRATE_PIMPL_IMPLEMENT_ALL(Class) \
-  CPPCRATE_PIMPL_IMPLEMENT_PRIVATE(Class)   \
-  CPPCRATE_PIMPL_IMPLEMENT_COPY(Class)      \
-  CPPCRATE_PIMPL_IMPLEMENT_MOVE(Class)      \
-  CPPCRATE_PIMPL_IMPLEMENT_COMPARISON(Class)
 #else
 #include <stdint.h>
 #define CPPCRATE_NULLPTR 0
-#include <sstream>
-namespace CppCrate {
-template <class T>
-inline std::string to_string(const T &t) {
-  std::stringstream ss;
-  ss << t;
-  return ss.str();
-}
-}
 #define CPPCRATE_TO_STRING(x) CppCrate::to_string(x)
 #define CPPCRATE_PIMPL_DECLARE_ALL(Class) \
   CPPCRATE_PIMPL_DECLARE_PRIVATE(Class)   \
   CPPCRATE_PIMPL_DECLARE_COPY(Class)      \
   CPPCRATE_PIMPL_DECLARE_COMPARISON(Class)
-#define CPPCRATE_PIMPL_IMPLEMENT_ALL(Class) \
-  CPPCRATE_PIMPL_IMPLEMENT_PRIVATE(Class)   \
-  CPPCRATE_PIMPL_IMPLEMENT_COPY(Class)      \
-  CPPCRATE_PIMPL_IMPLEMENT_COMPARISON(Class)
 #endif
 
 #define CPPCRATE_PIMPL_DECLARE_PRIVATE(Class) \
@@ -74,9 +56,6 @@ inline std::string to_string(const T &t) {
   class Private;                              \
   Private *p;
 
-#define CPPCRATE_PIMPL_IMPLEMENT_PRIVATE(Class) \
-  Class::~Class() { delete p; }
-
 #define CPPCRATE_PIMPL_DECLARE_COPY(Class)  \
  public:                                    \
   friend void swap(Class &lhs, Class &rhs); \
@@ -85,25 +64,11 @@ inline std::string to_string(const T &t) {
                                             \
  private:
 
-#define CPPCRATE_PIMPL_IMPLEMENT_COPY(Class)                     \
-  void swap(Class &lhs, Class &rhs) {                            \
-    using std::swap;                                             \
-    swap(lhs.p, rhs.p);                                          \
-  }                                                              \
-  Class::Class(const Class &other) : p(new Private(*other.p)) {} \
-  Class &Class::operator=(Class other) {                         \
-    swap(*this, other);                                          \
-    return *this;                                                \
-  }
-
 #define CPPCRATE_PIMPL_DECLARE_MOVE(Class) \
  public:                                   \
   Class(Class &&other);                    \
                                            \
  private:
-
-#define CPPCRATE_PIMPL_IMPLEMENT_MOVE(Class) \
-  Class::Class(Class &&other) : p(other.p) { other.p = CPPCRATE_NULLPTR; }
 
 #define CPPCRATE_PIMPL_DECLARE_COMPARISON(Class) \
  public:                                         \
@@ -111,7 +76,3 @@ inline std::string to_string(const T &t) {
   bool operator!=(const Class &other) const;     \
                                                  \
  private:
-
-#define CPPCRATE_PIMPL_IMPLEMENT_COMPARISON(Class)                            \
-  bool Class::operator==(const Class &other) const { return *p == *other.p; } \
-  bool Class::operator!=(const Class &other) const { return !(*this == other); }

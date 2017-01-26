@@ -15,6 +15,7 @@
  */
 
 #include <cppcrate/query.h>
+#include "global_p.h"
 
 namespace CppCrate {
 
