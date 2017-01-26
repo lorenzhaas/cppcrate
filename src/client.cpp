@@ -543,7 +543,7 @@ void Client::disconnect() { p->disconnect(); }
 /*!
  * Returns whether the client is connected.
  */
-bool Client::isConnected() const { return p->curl; }
+bool Client::isConnected() const { return p->curl != CPPCRATE_NULLPTR; }
 
 /*!
  * Returns whether the client is connected.

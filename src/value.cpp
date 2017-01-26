@@ -373,7 +373,7 @@ double Value::asDouble() const { return p->asNumeric<double>(); }
 bool Value::asBool() const {
   return (p->dataType == StringType)
              ? !(*p->data.sp == "false" || *p->data.sp == "0" || p->data.sp->empty())
-             : p->asNumeric<bool>();
+             : (p->asNumeric<int>() != 0);
 }
 
 }  // namespace CppCrate
