@@ -77,40 +77,33 @@ inline std::string to_string(const T &t) {
 #define CPPCRATE_PIMPL_IMPLEMENT_PRIVATE(Class) \
   Class::~Class() { delete p; }
 
-#define CPPCRATE_PIMPL_DECLARE_COPY(Class) \
- public:                                   \
-  Class(const Class &other);               \
-  Class &operator=(const Class &other);    \
-                                           \
+#define CPPCRATE_PIMPL_DECLARE_COPY(Class)  \
+ public:                                    \
+  friend void swap(Class &lhs, Class &rhs); \
+  Class(const Class &other);                \
+  Class &operator=(Class other);            \
+                                            \
  private:
 
 #define CPPCRATE_PIMPL_IMPLEMENT_COPY(Class)                     \
+  void swap(Class &lhs, Class &rhs) {                            \
+    using std::swap;                                             \
+    swap(lhs.p, rhs.p);                                          \
+  }                                                              \
   Class::Class(const Class &other) : p(new Private(*other.p)) {} \
-  Class &Class::operator=(const Class &other) {                  \
-    if (this != &other) {                                        \
-      delete p;                                                  \
-      p = new Private(*other.p);                                 \
-    }                                                            \
+  Class &Class::operator=(Class other) {                         \
+    swap(*this, other);                                          \
     return *this;                                                \
   }
 
 #define CPPCRATE_PIMPL_DECLARE_MOVE(Class) \
  public:                                   \
   Class(Class &&other);                    \
-  Class &operator=(Class &&other);         \
                                            \
  private:
 
-#define CPPCRATE_PIMPL_IMPLEMENT_MOVE(Class)                                          \
-  Class::Class(Class &&other) : p(std::move(other.p)) { other.p = CPPCRATE_NULLPTR; } \
-  Class &Class::operator=(Class &&other) {                                            \
-    if (this != &other) {                                                             \
-      delete p;                                                                       \
-      p = std::move(other.p);                                                         \
-      other.p = CPPCRATE_NULLPTR;                                                     \
-    }                                                                                 \
-    return *this;                                                                     \
-  }
+#define CPPCRATE_PIMPL_IMPLEMENT_MOVE(Class) \
+  Class::Class(Class &&other) : p(other.p) { other.p = CPPCRATE_NULLPTR; }
 
 #define CPPCRATE_PIMPL_DECLARE_COMPARISON(Class) \
  public:                                         \
