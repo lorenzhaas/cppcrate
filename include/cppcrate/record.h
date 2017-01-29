@@ -34,8 +34,15 @@ class CPPCRATE_EXPORT Record {
   Record(const std::string &data, const std::vector<std::string> &names,
          const std::vector<CrateDataType> &types);
 
-  int size() const;
+  typedef std::vector<Value>::const_iterator const_iterator;
+  const_iterator begin();
+  const_iterator end();
+#ifdef ENABLE_CPP11_SUPPORT
+  const_iterator cbegin();
+  const_iterator cend();
+#endif
 
+  int size() const;
   Value value(int pos) const;
   Value value(const std::string &name) const;
 };

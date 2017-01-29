@@ -139,6 +139,27 @@ TEST(RecordTests, Equal) {
   EXPECT_NE(r, Record("[1]", {"a"}, {CrateDataType(CrateDataType::String)}));
 }
 
+TEST(RecordTests, Iterators) {
+  using CppCrate::Record;
+  using CppCrate::Value;
+  using CppCrate::CrateDataType;
+
+  const CrateDataType type(CrateDataType::Integer);
+  Record r("[1, 2, 3]", {"a", "b", "c"}, {type, type, type});
+  CppCrate::Record::const_iterator b = r.begin();
+  CppCrate::Record::const_iterator e = r.end();
+  ASSERT_NE(b, e);
+  EXPECT_EQ(b->name(), "a");
+  ++b;
+  ASSERT_NE(b, e);
+  EXPECT_EQ(b->name(), "b");
+  ++b;
+  ASSERT_NE(b, e);
+  EXPECT_EQ(b->name(), "c");
+  ++b;
+  ASSERT_EQ(b, e);
+}
+
 int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

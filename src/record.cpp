@@ -41,6 +41,8 @@ namespace CppCrate {
  *   // use value here
  * }
  * \endcode
+ *
+ * or use C++11's range-based for-loop, or use begin() and end() with STL algorithms.
  */
 
 /// \cond INTERNAL
@@ -198,6 +200,28 @@ Record::Record(const std::string &data, const std::vector<std::string> &names,
 #endif
   }
 }
+
+/*!
+ * Returns a const iterator to the first value contained in this result.
+ */
+Record::const_iterator Record::begin() { return p->values.begin(); }
+
+/*!
+ * Returns a const iterator positioned after the last value contained in this result.
+ */
+Record::const_iterator Record::end() { return p->values.end(); }
+
+#ifdef ENABLE_CPP11_SUPPORT
+/*!
+ * Returns a const iterator to the first value contained in this result.
+ */
+Record::const_iterator Record::cbegin() { return p->values.cbegin(); }
+
+/*!
+ * Returns a const iterator positioned after the last value contained in this result.
+ */
+Record::const_iterator Record::cend() { return p->values.cend(); }
+#endif
 
 /*!
  * Returns the size of the values contained in the record.
