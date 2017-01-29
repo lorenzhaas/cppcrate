@@ -158,6 +158,10 @@ TEST(RecordTests, Iterators) {
   EXPECT_EQ(b->name(), "c");
   ++b;
   ASSERT_EQ(b, e);
+
+  Record empty;
+  EXPECT_EQ(empty.begin(), empty.end());
+  EXPECT_EQ(empty.cbegin(), empty.cend());
 }
 
 int main(int argc, char** argv) {
