@@ -732,13 +732,9 @@ RawResult Client::removeBlobStorage(const std::string& tableName) {
  * \pre \a data must be readable and already opened in binary mode.
  */
 BlobResult Client::uploadBlob(const std::string& tableName, std::istream& data) {
-  std::string key = Crypto::sha1(data);
-  if (key.empty()) {
-    BlobResult r;
-    r.setErrorString("Could not compute SHA1 key.", BlobResult::OtherErrorType);
-    return r;
-  }
-  return p->uploadBlob(tableName, key, data);
+  const std::string key = Crypto::sha1(data);
+  return key.empty() ? BlobResult("Could not compute SHA1 key.", BlobResult::OtherErrorType)
+                     : p->uploadBlob(tableName, key, data);
 }
 
 /*!
