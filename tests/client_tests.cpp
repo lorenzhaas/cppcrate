@@ -47,8 +47,10 @@ TEST(ClientTests, DisconnectedClient) {
 
   std::istringstream is;
   EXPECT_FALSE(c.uploadBlob("a", is));
+  EXPECT_FALSE(c.uploadBlob("a", "/tmp/cppcrateblob"));
   std::ostringstream os;
   EXPECT_FALSE(c.downloadBlob("a", "b", os));
+  EXPECT_FALSE(c.downloadBlob("a", "b", "/tmp/cppcrateblob"));
   EXPECT_FALSE(c.existsBlob("a", "b"));
   EXPECT_FALSE(c.deleteBlob("a", "b"));
 }

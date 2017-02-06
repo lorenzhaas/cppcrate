@@ -79,8 +79,11 @@ class CPPCRATE_EXPORT Client {
   RawResult removeBlobStorage(const std::string &tableName);
 
   BlobResult uploadBlob(const std::string &tableName, std::istream &data);
+  BlobResult uploadBlob(const std::string &tableName, const std::string &file);
   BlobResult existsBlob(const std::string &tableName, const std::string &key);
   BlobResult downloadBlob(const std::string &tableName, const std::string &key, std::ostream &data);
+  BlobResult downloadBlob(const std::string &tableName, const std::string &key,
+                          const std::string &file);
   BlobResult deleteBlob(const std::string &tableName, const std::string &key);
 #endif
 };

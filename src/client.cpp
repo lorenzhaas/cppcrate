@@ -18,6 +18,7 @@
 #include "global_p.h"
 
 #ifdef ENABLE_BLOB_SUPPORT
+#include <fstream>
 #include "crypto.h"
 #endif
 
@@ -741,6 +742,23 @@ BlobResult Client::uploadBlob(const std::string& tableName, std::istream& data) 
 }
 
 /*!
+ * Uploads the file \a file to the table \a tableName. If the operation was successful the result
+ * can be used to receive the key of the inserted blob.
+ *
+ * \code
+ * CppCrate::BlobResult result = client.uploadBlob("blobtable", "/path/to/blob");
+ * if (result) {
+ *   std::cout << "Key is " << result.key() << "\n";
+ * }
+ * \endcode
+ */
+BlobResult Client::uploadBlob(const std::string& tableName, const std::string& file) {
+  std::ifstream stream(file.c_str(), std::ifstream::binary);
+  return stream ? uploadBlob(tableName, stream)
+                : BlobResult("Could not open file.", BlobResult::OtherErrorType);
+}
+
+/*!
  * Returns whether a blob identified by \a key exists in the table \a tableName.
  *
  * \note Be careful interpreting BlobResult::hasError() of the returned result. It does not
@@ -774,7 +792,27 @@ BlobResult Client::downloadBlob(const std::string& tableName, const std::string&
 }
 
 /*!
- * Deletes the blob identified by \a key of the table \a tableName and returns the action's result.
+ * Downloads the blob identified by \a key of the table \a tableName and stores it to the file
+ * \a file.
+ *
+ * \code
+ * CppCrate::BlobResult result = client.downloadBlob(
+ *   "blobtable", "93390aa9ed64e1e96149ceb0262f34aa2aedcffc", "/path/to/store/the/blob");
+ * if (result) {
+ *   std::cout << "Download succeeded!\n";
+ * }
+ * \endcode
+ */
+BlobResult Client::downloadBlob(const std::string& tableName, const std::string& key,
+                                const std::string& file) {
+  std::ofstream stream(file.c_str(), std::ifstream::binary);
+  return stream ? downloadBlob(tableName, key, stream)
+                : BlobResult("Could not open file.", BlobResult::OtherErrorType);
+}
+
+/*!
+ * Deletes the blob identified by \a key of the table \a tableName and returns the action's
+ * result.
  */
 BlobResult Client::deleteBlob(const std::string& tableName, const std::string& key) {
   return p->deleteBlob(tableName, key);
