@@ -116,10 +116,42 @@ class Value::Private {
 
   Private &operator=(const Private &other) {
     if (this != &other) {
+      if (dataType == StringType) delete data.sp;
       *this = Private(other);
     }
     return *this;
   }
+
+#ifdef ENABLE_CPP11_SUPPORT
+  Private(Private &&other)
+      : type(std::move(other.type)),
+        dataType(std::move(other.dataType)),
+        name(std::move(other.name)) {
+    if (dataType == StringType) {
+      data.sp = std::move(other.data.sp);
+      other.data.sp = CPPCRATE_NULLPTR;
+    } else {
+      data = std::move(other.data);
+    }
+  }
+
+  Private &operator=(Private &&other) {
+    if (this != &other) {
+      if (dataType == StringType) delete data.sp;
+
+      type = std::move(other.type);
+      dataType = std::move(other.dataType);
+      if (dataType == StringType) {
+        data.sp = std::move(other.data.sp);
+        other.data.sp = CPPCRATE_NULLPTR;
+      } else {
+        data = std::move(other.data);
+      }
+      name = std::move(other.name);
+    }
+    return *this;
+  }
+#endif
 
   bool operator==(const Private &other) const {
     if (type != other.type || dataType != other.dataType || name != other.name) {

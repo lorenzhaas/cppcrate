@@ -97,6 +97,37 @@ TEST(ValueTests, Contructors) {
   EXPECT_NE(v, Value("a", CrateDataType(CrateDataType::Null), std::string("Hobbes")));
 }
 
+TEST(ValueTests, PrivateMove) {
+  using CppCrate::CrateDataType;
+  using CppCrate::Value;
+
+  {
+    Value origin = Value("a", CrateDataType(CrateDataType::Null), std::string("Calvin"));
+    Value destination(std::move(origin));
+    origin.~Value();
+    EXPECT_EQ(destination.name(), "a");
+    EXPECT_EQ(destination.crateType().type(), CrateDataType::Null);
+    EXPECT_EQ(destination.type(), Value::StringType);
+    EXPECT_FALSE(destination.isInvalid());
+    EXPECT_FALSE(destination.isNull());
+    EXPECT_EQ(destination.asString(), "Calvin");
+  }
+
+  {
+    Value destination;
+    {
+      Value origin = Value("a", CrateDataType(CrateDataType::Null), std::string("Calvin"));
+      destination = std::move(origin);
+    }
+    EXPECT_EQ(destination.name(), "a");
+    EXPECT_EQ(destination.crateType().type(), CrateDataType::Null);
+    EXPECT_EQ(destination.type(), Value::StringType);
+    EXPECT_FALSE(destination.isInvalid());
+    EXPECT_FALSE(destination.isNull());
+    EXPECT_EQ(destination.asString(), "Calvin");
+  }
+}
+
 struct ConvData {
   CppCrate::Value value;
   bool asBool;
